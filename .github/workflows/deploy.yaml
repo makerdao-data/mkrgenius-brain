@@ -1,4 +1,4 @@
-name: 🚚 Deploy ygenius-brain PRODUCTION
+name: 🚚 Deploy mkrgenius-brain PRODUCTION
 on:
   workflow_dispatch:
   workflow_run:
@@ -10,11 +10,11 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to ygenius-brain production
+      - name: Deploy to mkrgenius-brain production
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: cd $HOME/ygenius-brain && git pull --rebase && ./deploy.sh
+          script: cd $HOME/mkrgenius-brain && git pull --rebase && ./deploy.sh

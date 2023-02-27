@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  ygenius-brain:
+  mkrgenius-brain:
     build: .
-    image: ghcr.io/yearn/ygenius-brain
+    image: ghcr.io/tadeongmi/mkrgenius-brain
     ports:
       - 127.0.0.1:5001:5001
     environment:

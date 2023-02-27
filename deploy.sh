@@ -1,8 +1,8 @@
 #! /bin/bash
 set -e
 
-YGENIUS_HOME=${1:-$HOME/ygenius-brain}
-cd $YGENIUS_HOME
-docker pull ghcr.io/yearn/ygenius-brain
+MKRGENIUS_HOME=${1:-$HOME/mkrgenius-brain}
+cd $MKRGENIUS_HOME
+docker pull ghcr.io/tadeongmi/mkrgenius-brain
 docker-compose down
 docker-compose up -d
