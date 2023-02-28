@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run src/index.py
+web: sh build_index.sh && python run index.py
