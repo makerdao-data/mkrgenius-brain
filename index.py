@@ -12,8 +12,6 @@ import os
 app = flask.Flask(__name__)
 CORS(app)
 
-#os.environ["OPENAI_API_KEY"] =
-
 max_input_size = 2048
 num_outputs = 2048
 llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.2, model_name="text-davinci-003", max_tokens=num_outputs))
