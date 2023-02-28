@@ -1,0 +1,18 @@
+[submodule "training-data/collateral"]
+	path = training-data/collateral
+	url = https://github.com/makerdao/mcd-collateral.git
+[submodule "training-data/endgame"]
+	path = training-data/endgame
+	url = https://github.com/makerdao/endgame-docs.git
+[submodule "training-data/governance"]
+	path = training-data/governance
+	url = https://github.com/makerdao/governance-manual.git
+[submodule "training-data/mips"]
+	path = training-data/mips
+	url = https://github.com/makerdao/mips.git
+[submodule "training-data/mcd"]
+	path = training-data/mcd
+	url = https://github.com/makerdao/mcd-docs-content.git
+[submodule "training-data/community"]
+	path = training-data/community
+	url = https://github.com/makerdao/community.git
