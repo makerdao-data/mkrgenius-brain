@@ -11,4 +11,4 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . /app
 
-ENTRYPOINT ["waitress-serve", "--host=0.0.0.0", "--port=5001", "--call", "index:create_app"]
+ENTRYPOINT ["waitress-serve", "--host=mkrgenius.herokuapp.com", "--port=5001", "--call", "index:create_app"]
