@@ -41,7 +41,8 @@ def ask():
   return jsonify(response.response.strip())
 
 
-app.run()
+def create_app():
+    return app
 
 # def ask(question):
 #   max_input_size = 2048
