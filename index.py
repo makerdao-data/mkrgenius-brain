@@ -1,13 +1,11 @@
-# pip install gpt_index
-# pip install langchain
-# pip install sentencepiece
-
-from gpt_index import SimpleDirectoryReader, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
+from llama_index import SimpleDirectoryReader, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 import flask
 from flask import request, jsonify
 from flask_cors import CORS
+
 import os
+os.environ["OPENAI_API_KEY"] = 'OPENAI_API_KEY'
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -22,6 +20,9 @@ def construct_index(directory_path, index_name):
   index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper)
   index.save_to_disk(index_name)
   return index
+
+# construct index
+#construct_index('./training-data', 'index.json')
 
 index = GPTSimpleVectorIndex.load_from_disk('index.json')
 
@@ -38,9 +39,12 @@ def ask():
   print(response.response.strip())
   return jsonify(response.response.strip())
 
+# for local execution
+app.run()
 
-def create_app():
-    return app
+# for dockerised execution
+#def create_app():
+#    return app
 
 # def ask(question):
 #   max_input_size = 2048
@@ -53,7 +57,6 @@ def create_app():
   # with open('result.md', 'w') as f:
   #   f.write(response.response.strip())
 
-# construct_index('./training-data', 'index.json')
 # ask('what is the endgame plan?')
 
 # while True:

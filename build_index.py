@@ -1,4 +1,4 @@
-from gpt_index import SimpleDirectoryReader, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
+from llama_index import SimpleDirectoryReader, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 
 max_input_size = 3700

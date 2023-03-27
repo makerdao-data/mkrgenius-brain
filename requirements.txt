@@ -1,6 +1,10 @@
-gpt-index==0.3.6
+llama-index==0.4.21
 langchain==0.0.76
 sentencepiece==0.1.97
 flask==2.2.2
 flask_cors==3.0.1
 waitress>==2.1.2
+torch
+Pillow
+python-dotenv
+protobuf==3.20
