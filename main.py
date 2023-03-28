@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = 'YOUR_OPENAI_API_KEY'
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
 # Don't forget to replace the above API Key!!
 # Link to generate one: https://platform.openai.com/account/api-keys
 

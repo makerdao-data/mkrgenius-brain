@@ -5,7 +5,11 @@ from flask import request, jsonify
 from flask_cors import CORS
 
 import os
-os.environ["OPENAI_API_KEY"] = 'OPENAI_API_KEY'
+from dotenv import load_dotenv
+
+load_dotenv()
+
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 app = flask.Flask(__name__)
 CORS(app)
