@@ -16,17 +16,8 @@ CORS(app)
 
 max_input_size = 2048
 num_outputs = 2048
-llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.2, model_name="text-davinci-003", max_tokens=num_outputs))
+llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.1, model_name="gpt-3.5-turbo", max_tokens=num_outputs)) # other models: gpt-4, gpt-3.5-turbo, text-davinci-003
 prompt_helper = PromptHelper.from_llm_predictor(llm_predictor)
-
-def construct_index(directory_path, index_name):
-  documents = SimpleDirectoryReader(directory_path, recursive=True).load_data()
-  index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper)
-  index.save_to_disk(index_name)
-  return index
-
-# construct index
-#construct_index('./training-data', 'index.json')
 
 index = GPTSimpleVectorIndex.load_from_disk('index.json')
 
@@ -35,34 +26,28 @@ def ask():
   history = request.args.get('history')
   query = ''
   if history == 'none':
-    query = 'about MakerDAO: ' + request.args.get('query') 
+    query = 'about Maker: ' + request.args.get('query') 
   else:
-    query = 'Instructions: you are chatting with anon about MakerDAO\n\n' + history + '\n\n' + 'Anon:\n' + request.args.get('query') + '\n\nYou:\n'
+    query = 'Instructions: you are chatting with anon about Maker\n\n' + history + '\n\n' + 'Anon:\n' + request.args.get('query') + '\n\nYou:\n'
   print(query)
   response = index.query(query, response_mode="default", prompt_helper=prompt_helper)
   print(response.response.strip())
   return jsonify(response.response.strip())
 
-# for local execution
-app.run()
 
 # for dockerised execution
-#def create_app():
-#    return app
+def create_app():
+   return app
 
-# def ask(question):
-#   max_input_size = 2048
-#   num_outputs = 2048
-#   llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.2, model_name="text-davinci-003", max_tokens=num_outputs))
-#   prompt_helper = PromptHelper.from_llm_predictor(llm_predictor)
-#   print(question + '\n')
-#   response = index.query(question, response_mode="default", prompt_helper=prompt_helper)
-#   print(response.response.strip() + '\n\n')
-  # with open('result.md', 'w') as f:
-  #   f.write(response.response.strip())
+def ask(question):
+  print(question + '\n')
+  response = index.query(question, response_mode="default", prompt_helper=prompt_helper)
+  print(response.response.strip() + '\n\n')
+  with open('result.md', 'w') as f:
+    f.write(response.response.strip())
 
-# ask('what is the endgame plan?')
+ask('what is the endgame plan?')
 
-# while True:
-#   q = input('Question: ')
-#   ask(q)
+while True:
+  q = input('Question: ')
+  ask(q)
