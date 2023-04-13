@@ -1,3 +1,4 @@
 .env
 index.json
 index_new.json
+.DS_Store
