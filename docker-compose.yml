@@ -3,7 +3,7 @@ version: "3.7"
 services:
   mkrgenius-brain:
     build: .
-    image: ghcr.io/tadeongmi/mkrgenius-brain
+    image: ghcr.io/makerdao-data/mkrgenius-brain
     ports:
       - 127.0.0.1:5001:5001
     environment:
