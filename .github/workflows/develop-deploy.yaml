@@ -3,8 +3,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["🏗 Build & publish docker image - DEVELOP"]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   
@@ -53,5 +52,5 @@ jobs:
           cd ${{ secrets.TARGET_DIR }}
           sudo docker stop dev-mkrgenius-brain
           sudo docker rm dev-mkrgenius-brain
-          sudo docker pull ghcr.io/makerdao-data/mkrgenius-brain:latest
-          sudo docker run -d --name dev-mkrgenius-brain --env-file .env -p 8000:8000 ghcr.io/makerdao-data/mkrgenius-brain:latest
+          sudo docker pull ghcr.io/makerdao-data/mkrgenius-brain
+          sudo docker run -d --name dev-mkrgenius-brain --env-file .env -p 8000:8000 ghcr.io/makerdao-data/mkrgenius-brain

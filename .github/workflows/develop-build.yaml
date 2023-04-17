@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      contents: write
+      packages: read
       packages: write
 
     steps:
