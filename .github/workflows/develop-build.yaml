@@ -50,7 +50,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
-      - run: echo "steps.meta.outputs.tags ${{ steps.meta.outputs.tags }}"
-      - run: echo "steps.meta.outputs.labels ${{ steps.meta.outputs.labels }}"
