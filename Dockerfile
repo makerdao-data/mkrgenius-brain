@@ -11,4 +11,14 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . /app
 
-ENTRYPOINT ["waitress-serve", "--host=0.0.0.0", "--port=5001", "--call", "main:create_app"]
+RUN mkdir tmpfs
+
+RUN python3 -m venv /env
+RUN . /env/bin/activate
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+CMD gunicorn --workers 4 --max-requests 1000 \
+    --timeout 240 --bind :8000 --capture-output \
+    --error-logfile - --log-file - \
+    --worker-tmp-dir ./tmpfs/  main:app

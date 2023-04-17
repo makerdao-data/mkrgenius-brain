@@ -24,31 +24,17 @@ index = GPTSimpleVectorIndex.load_from_disk('index.json')
 
 @app.route('/ask', methods=['GET'])
 def ask():
-  history = request.args.get('history')
-  query = ''
-  if history == 'none':
-    query = 'about Maker: ' + request.args.get('query') 
-  else:
-    query = 'Instructions: you are chatting with anon about Maker\n\n' + history + '\n\n' + 'Anon:\n' + request.args.get('query') + '\n\nYou:\n'
-  print(query)
-  response = index.query(query, response_mode="default", prompt_helper=prompt_helper)
-  print(response.response.strip())
-  return jsonify(response.response.strip())
+	history = request.args.get('history')
+	query = ''
+	if history == 'none':
+		query = 'about Maker: ' + request.args.get('query')
+	else:
+		query = 'Instructions: you are chatting with anon about Maker\n\n' + history + '\n\n' + 'Anon:\n' + request.args.get('query') + '\n\nYou:\n'
+  	
+	print(query)
+	response = index.query(query, response_mode="default", prompt_helper=prompt_helper)
+	print(response.response.strip())
+	return jsonify(response.response.strip())
 
-
-# for dockerised execution
-def create_app():
-   return app
-
-def ask(question):
-  print(question + '\n')
-  response = index.query(question, response_mode="default", prompt_helper=prompt_helper)
-  print(response.response.strip() + '\n\n')
-  with open('result.md', 'w') as f:
-    f.write(response.response.strip())
-
-ask('what is the endgame plan?')
-
-while True:
-  q = input('Question: ')
-  ask(q)
+if __name__ == "__main__":
+	app.run(debug=False)

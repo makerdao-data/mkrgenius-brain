@@ -5,7 +5,7 @@ services:
     build: .
     image: ghcr.io/makerdao-data/mkrgenius-brain
     ports:
-      - 127.0.0.1:5001:5001
+      - 8000:8000
     environment:
       - OPENAI_API_KEY
     volumes:
