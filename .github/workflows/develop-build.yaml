@@ -1,56 +1,47 @@
-name: 🏗 Build & publish docker image - DEVELOP
+name: Deploy to Amazon EC2 - DEV-MKRGENIUS-BRAIN
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ "develop" ]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+permissions:
+  contents: read
 
 jobs:
-  build:
+
+  deploy:
+    name: Push to Amazon EC2 - DEV-MKRGENIUS-BRAIN
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
+    environment: develop
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Login against a Docker registry
-      # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha
-            type=sha,format=long
-            # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
-      - run: echo "IMAGE ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-
-      # Build and push Docker image with Buildx
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-      - run: echo "steps.meta.outputs.tags ${{ steps.meta.outputs.tags }}"
-      - run: echo "steps.meta.outputs.labels ${{ steps.meta.outputs.labels }}"
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Deploy to DEV-MKRGENIUS-BRAIN
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        REMOTE_HOST: ${{ secrets.HOST_DNS }}
+        REMOTE_USER: ${{ secrets.USERNAME }}
+        TARGET: ${{ secrets.TARGET_DIR }}
+  
+  build:
+    name: Build and start DEV-MKRGENIUS-BRAIN
+    runs-on: ubuntu-latest
+    needs: deploy
+    
+    steps:
+    - name: Executing remote SSH commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_DNS }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ${{ secrets.TARGET_DIR }}
+          sudo docker stop dev-mkrgenius-brain
+          sudo docker rm dev-mkrgenius-brain
+          git checkout develop && git pull --rebase
+          sudo docker build . -t brain:dev
+          sudo docker run -d --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
