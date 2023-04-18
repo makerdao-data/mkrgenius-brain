@@ -54,7 +54,7 @@ def ask():
   return jsonify(response.response.strip())
 
 # construct index
-#construct_index('./training-data', 'index_new.json')
+#construct_index('./documents', 'index_new.json')
 
 # run app
 app.run()
