@@ -7,7 +7,7 @@ from llama_index.indices.struct_store import GPTPandasIndex
 
 index1 = GPTSimpleVectorIndex.load_from_disk('index.json')
 
-df = pd.read_csv("./documentssets/collaterals.csv")
+df = pd.read_csv("./datasets/collaterals.csv")
 index2 = GPTPandasIndex(df=df)
 
 graph = ComposableGraph.from_indices(GPTListIndex, [index1, index2], index_summaries=["summary1", "summary2"])
