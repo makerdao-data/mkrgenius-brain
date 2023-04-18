@@ -12,4 +12,4 @@ def construct_index(directory_path, index_name):
   index.save_to_disk(index_name)
   return index
 
-construct_index('./training-data', 'index_new.json')
+construct_index('./documents', 'index_new.json')

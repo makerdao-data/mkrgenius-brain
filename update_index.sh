@@ -2,7 +2,7 @@
 set -e
 
 MKRGENIUS_HOME=${1:-$HOME/mkrgenius-brain}
-echo "updating training-data index..."
+echo "updating documents index..."
 cd $MKRGENIUS_HOME
 docker rm -f mkrgenius-builder || true
 docker run --env-file=.env --name mkrgenius-builder --entrypoint "/app/build_index.sh" ghcr.io/makerdao-data/mkrgenius-brain

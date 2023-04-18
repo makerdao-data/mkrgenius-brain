@@ -30,9 +30,9 @@ Whenever making changes to the code base, you need to rebuild a new docker image
 `curl "http://localhost:5001/ask?history=&query=what%20is%20makerdao%20%3F"`
 
 ## Training data
-- training-data/collateral: https://github.com/makerdao/mcd-collateral.git
-- training-data/endgame:    https://github.com/makerdao/endgame-docs.git
-- training-data/governance: https://github.com/makerdao/governance-manual.git
-- training-data/mips:       https://github.com/makerdao/mips.git
-- training-data/mcd:        https://github.com/makerdao/mcd-docs-content.git
-- training-data/community:  https://github.com/makerdao/community.git
+- documents/collateral: https://github.com/makerdao/mcd-collateral.git
+- documents/endgame:    https://github.com/makerdao/endgame-docs.git
+- documents/governance: https://github.com/makerdao/governance-manual.git
+- documents/mips:       https://github.com/makerdao/mips.git
+- documents/mcd:        https://github.com/makerdao/mcd-docs-content.git
+- documents/community:  https://github.com/makerdao/community.git
