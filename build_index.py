@@ -5,7 +5,7 @@ load_dotenv()
 
 from gpt_index import SimpleDirectoryReader, GPTSimpleVectorIndex, LLMPredictor, PromptHelper, GPTRAKEKeywordTableIndex, GPTSimpleKeywordTableIndex, GPTListIndex
 from langchain import OpenAI
-from datetime import datetime
+
 
 max_input_size = 3700
 num_outputs = 300
