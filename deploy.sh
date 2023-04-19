@@ -3,6 +3,7 @@ set -e
 
 MKRGENIUS_HOME=${1:-$HOME/mkrgenius-brain}
 cd $MKRGENIUS_HOME
-docker pull ghcr.io/makerdao-data/mkrgenius-brain
+git checkout develop && git pull --rebase
+sudo docker build . -t brain:dev
 docker-compose down
 docker-compose up -d
