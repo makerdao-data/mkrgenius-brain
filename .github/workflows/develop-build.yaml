@@ -41,7 +41,7 @@ jobs:
         script: |
           cd ${{ secrets.DEV_TARGET_DIR }}
           sudo docker stop dev-mkrgenius-brain
-          sudo docker rm dev-mkrgenius-brain
+          sudo docker rm -f dev-mkrgenius-brain
           git checkout develop && git pull --rebase
           sudo docker build . -t brain:dev
-          sudo docker run -d --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
+          sudo docker run -d -v ${{ secrets.DEV_TARGET_DIR }}/index.json:/app/index.json --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
