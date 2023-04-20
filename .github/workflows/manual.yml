@@ -25,7 +25,4 @@ jobs:
         host: ${{ secrets.DEV_HOST_DNS }}
         username: ${{ secrets.DEV_USERNAME }}
         key: ${{ secrets.DEV_EC2_SSH_KEY }}
-        run: |
-         chmod +x /home/ubuntu/mkrgenius-brain/update_index.sh
-         /home/ubuntu/mkrgenius-brain/update_index.sh
-        shell: bash
+        script: chmod +x /home/ubuntu/mkrgenius-brain/update_index.sh && /home/ubuntu/mkrgenius-brain/update_index.sh
