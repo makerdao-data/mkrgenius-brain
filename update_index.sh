@@ -17,6 +17,7 @@ sudo docker rm -f mkrgenius-builder || true
 echo "restarting the app..."
 mv index_new.json index.json
 sudo docker stop dev-mkrgenius-brain
+sudo docker rm -f dev-mkrgenius-brain
 sudo docker run -d -v $MKRGENIUS_HOME/index.json:/app/index.json --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
 echo "deleting image used for index update..."
 docker rmi -f brain:builder
