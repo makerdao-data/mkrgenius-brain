@@ -1,4 +1,4 @@
-name: 🚚 Deploy mkrgenius-brain to EC2
+name: 🚚 Deploy mkrgenius-brain to EC2 - DEVELOP
 
 on:
   push:
