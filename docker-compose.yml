@@ -1,13 +1,13 @@
 version: "3.7"
 
 services:
-  mkrgenius-brain:
+  dev-mkrgenius-brain:
     build: .
-    image: ghcr.io/makerdao-data/mkrgenius-brain
+    image: brain:dev
     ports:
-      - 127.0.0.1:5001:5001
+      - 8000:8000
     environment:
       - OPENAI_API_KEY
     volumes:
-      - ${INDEX_DIR:-$PWD}/index.json:/app/index.json
+      - ./index.json:/app/index.json
     restart: unless-stopped

@@ -1,0 +1,48 @@
+name: 🚚 Deploy mkrgenius-brain to EC2
+
+on:
+  push:
+    branches: [ "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  stage_1:
+    name: Push to EC2
+    runs-on: ubuntu-latest
+    environment: develop
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Push latest mkrgenius-brain to EC2
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
+        REMOTE_HOST: ${{ secrets.DEV_HOST_DNS }}
+        REMOTE_USER: ${{ secrets.DEV_USERNAME }}
+        TARGET: ${{ secrets.DEV_TARGET_DIR }}
+  
+  stage_2:
+    name: Build and re-start dev-mkrgenius-brain
+    runs-on: ubuntu-latest
+    needs: stage_1
+    
+    steps:
+    - name: Executing remote SSH commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEV_HOST_DNS }}
+        username: ${{ secrets.DEV_USERNAME }}
+        key: ${{ secrets.DEV_EC2_SSH_KEY }}
+        script: |
+          cd ${{ secrets.DEV_TARGET_DIR }}
+          sudo docker stop dev-mkrgenius-brain
+          sudo docker rm -f dev-mkrgenius-brain
+          git checkout develop && git pull --rebase
+          sudo docker build . -t brain:dev
+          sudo docker run -d -v ${{ secrets.DEV_TARGET_DIR }}/index.json:/app/index.json --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
+          sudo docker system prune -f
