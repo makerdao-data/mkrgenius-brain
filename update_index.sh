@@ -5,21 +5,21 @@ MKRGENIUS_HOME=${1:-$HOME/mkrgenius-brain}
 echo "updating index..."
 cd $MKRGENIUS_HOME
 # stopping and removing the container as we're creating a new one
-docker stop -f mkrgenius-builder || true
-docker rm -f mkrgenius-builder || true
+sudo docker stop mkrgenius-builder || true
+sudo docker rm -f mkrgenius-builder || true
 echo "pulling newest files and building mkrgenius image..."
 git checkout develop && git pull --rebase
-docker build . -t brain:builder
+sudo docker build . -t brain:builder
 echo "starting the container and creating fresh index..."
-docker run --env-file=.env --name mkrgenius-builder --entrypoint "/app/build_index.sh" brain:builder
-docker cp mkrgenius-builder:/app/index_new.json .
+sudo docker run --env-file=.env --name mkrgenius-builder --entrypoint "/app/build_index.sh" brain:builder
+sudo docker cp mkrgenius-builder:/app/index_new.json .
 # stopping and removing the container as it won't be no longer needed
-docker stop -f mkrgenius-builder || true
-docker rm -f mkrgenius-builder || true
+sudo docker stop mkrgenius-builder || true
+sudo docker rm -f mkrgenius-builder || true
 echo "restarting the app..."
-docker-compose down
 mv index_new.json index.json
-docker-compose up -d
+sudo docker stop dev-mkrgenius-brain
+sudo docker run -d -v $MKRGENIUS_HOME/index.json:/app/index.json --name dev-mkrgenius-brain --env-file .env -p 8000:8000 brain:dev
 echo "deleting image used for index update..."
 docker rmi brain:builder -f
 docker system prune -f

@@ -1,8 +1,4 @@
-name: Deploy to Amazon EC2 - DEV-MKRGENIUS-BRAIN
-
-# on:
-#   push:
-#     branches: [ "develop" ]
+name: Update index.json
 
 permissions:
   contents: read
@@ -27,7 +23,7 @@ jobs:
         TARGET: ${{ secrets.DEV_TARGET_DIR }}
   
   stage_2:
-    name: Update index and re-start DEV-MKRGENIUS-BRAIN
+    name: Update index.json and re-start DEV-MKRGENIUS-BRAIN
     runs-on: ubuntu-latest
     needs: stage_1
     
