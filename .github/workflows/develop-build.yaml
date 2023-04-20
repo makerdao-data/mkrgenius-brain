@@ -1,4 +1,4 @@
-name: Deploy to Amazon EC2 - DEV-MKRGENIUS-BRAIN
+name: 🚚 Deploy mkrgenius-brain to EC2
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 jobs:
 
   stage_1:
-    name: Push to Amazon EC2 - DEV-MKRGENIUS-BRAIN
+    name: Push to EC2
     runs-on: ubuntu-latest
     environment: develop
 
@@ -18,7 +18,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     
-    - name: Deploy to DEV-MKRGENIUS-BRAIN
+    - name: Push latest mkrgenius-brain to EC2
       uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
@@ -27,7 +27,7 @@ jobs:
         TARGET: ${{ secrets.DEV_TARGET_DIR }}
   
   stage_2:
-    name: Build and re-start DEV-MKRGENIUS-BRAIN
+    name: Build and re-start dev-mkrgenius-brain
     runs-on: ubuntu-latest
     needs: stage_1
     
