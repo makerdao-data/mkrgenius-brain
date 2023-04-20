@@ -16,39 +16,40 @@ jobs:
 
     if: github.event.pull_request.merged == true
     stage_1:
-    name: Push to EC2
-    runs-on: ubuntu-latest
+      name: Push to EC2
+      runs-on: ubuntu-latest
+      environment: develop
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Push latest mkrgenius-brain to EC2
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_HOST_DNS }}
+          REMOTE_USER: ${{ secrets.PROD_USERNAME }}
+          TARGET: ${{ secrets.PROD_TARGET_DIR }}
     
-    - name: Push latest mkrgenius-brain to EC2
-      uses: easingthemes/ssh-deploy@main
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
-        REMOTE_HOST: ${{ secrets.PROD_HOST_DNS }}
-        REMOTE_USER: ${{ secrets.PROD_USERNAME }}
-        TARGET: ${{ secrets.PROD_TARGET_DIR }}
-
     stage_2:
-    name: Build and re-start mkrgenius-brain
-    runs-on: ubuntu-latest
-    needs: stage_1
-    
-    steps:
-    - name: Executing remote SSH commands
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DEV_HOST_DNS }}
-        username: ${{ secrets.DEV_USERNAME }}
-        key: ${{ secrets.DEV_EC2_SSH_KEY }}
-        script: |
-          cd ${{ secrets.PROD_TARGET_DIR }}
-          git checkout develop index.json
-          sudo docker stop mkrgenius-brain
-          sudo docker rm -f mkrgenius-brain
-          git checkout main && git pull --rebase
-          sudo docker build . -t brain:prod
-          sudo docker run -d -v ${{ secrets.PROD_TARGET_DIR }}/index.json:/app/index.json --name mkrgenius-brain --env-file .env -p 8000:8000 brain:prod
-          sudo docker system prune -f
+      name: Build and re-start mkrgenius-brain
+      runs-on: ubuntu-latest
+      needs: stage_1
+      
+      steps:
+      - name: Executing remote SSH commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_HOST_DNS }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_EC2_SSH_KEY }}
+          script: |
+            cd ${{ secrets.PROD_TARGET_DIR }}
+            git checkout develop index.json
+            sudo docker stop mkrgenius-brain
+            sudo docker rm -f mkrgenius-brain
+            git checkout main && git pull --rebase
+            sudo docker build . -t brain:prod
+            sudo docker run -d -v ${{ secrets.PROD_TARGET_DIR }}/index.json:/app/index.json --name mkrgenius-brain --env-file .env -p 8000:8000 brain:prod
+            sudo docker system prune -f
