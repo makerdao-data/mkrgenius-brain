@@ -25,4 +25,7 @@ jobs:
         host: ${{ secrets.DEV_HOST_DNS }}
         username: ${{ secrets.DEV_USERNAME }}
         key: ${{ secrets.DEV_EC2_SSH_KEY }}
-        script: cd /home/ubuntu/mkrgenius-brain && git checkout develop && git pull --rebase && ./update_index.sh
+        run: |
+         chmod +x /home/ubuntu/mkrgenius-brain/update_index.sh
+         /home/ubuntu/mkrgenius-brain/update_index.sh
+        shell: bash
