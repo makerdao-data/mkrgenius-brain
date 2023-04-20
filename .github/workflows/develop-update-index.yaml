@@ -1,4 +1,4 @@
-name: Update index.json
+name: Update index - DEV-MKRGENIUS-BRAIN
 
 on:
   workflow_dispatch:
@@ -37,7 +37,4 @@ jobs:
         host: ${{ secrets.DEV_HOST_DNS }}
         username: ${{ secrets.DEV_USERNAME }}
         key: ${{ secrets.DEV_EC2_SSH_KEY }}
-        script: |
-          cd ${{ secrets.DEV_TARGET_DIR }}
-          git checkout develop && git pull --rebase
-          ./update_index.sh
+        script: cd ${{ secrets.DEV_TARGET_DIR }} && git checkout develop && git pull --rebase && ./update_index.sh
