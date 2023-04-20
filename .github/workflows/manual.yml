@@ -1,3 +1,5 @@
+
+
 # This is a basic workflow that is manually triggered
 
 name: Manual workflow
@@ -9,8 +11,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
+  # This workflow contains a single job called "update_index"
+  update_index:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -23,4 +25,4 @@ jobs:
         host: ${{ secrets.DEV_HOST_DNS }}
         username: ${{ secrets.DEV_USERNAME }}
         key: ${{ secrets.DEV_EC2_SSH_KEY }}
-        script: cd ${{ secrets.DEV_TARGET_DIR }} && git checkout develop && git pull --rebase && ./update_index.sh
+        script: cd /home/ubuntu/mkrgenius-brain && git checkout develop && git pull --rebase && ./update_index.sh
