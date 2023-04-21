@@ -16,22 +16,16 @@ jobs:
 
     # if: github.event.pull_request.merged == true
 
-    name: Push to EC2
+    name: Pull latest version of mkrgenius-brain
     runs-on: ubuntu-latest
-    environment: develop
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
-    - name: Push latest mkrgenius-brain to EC2
-      uses: easingthemes/ssh-deploy@main
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
-        REMOTE_HOST: ${{ secrets.PROD_HOST_DNS }}
-        REMOTE_USER: ${{ secrets.PROD_USERNAME }}
-        TARGET: ${{ secrets.PROD_TARGET_DIR }}
-    
+      with:
+        ref: 'master'
+        fetch-depth: 0
+  
   stage_2:
 
     # if: github.event.pull_request.merged == true
@@ -49,10 +43,9 @@ jobs:
         key: ${{ secrets.PROD_EC2_SSH_KEY }}
         script: |
           cd ${{ secrets.PROD_TARGET_DIR }}
-          git checkout develop index.json
+          chmod +x ${{ secrets.PROD_TARGET_DIR }}/update_index.sh && ${{ secrets.PROD_TARGET_DIR }}/update_index.sh
           sudo docker stop mkrgenius-brain
           sudo docker rm -f mkrgenius-brain
-          git checkout main && git pull --rebase
           sudo docker build . -t brain:prod
           sudo docker run -d -v ${{ secrets.PROD_TARGET_DIR }}/index.json:/app/index.json --name mkrgenius-brain --env-file .env -p 8000:8000 brain:prod
           sudo docker system prune -f
