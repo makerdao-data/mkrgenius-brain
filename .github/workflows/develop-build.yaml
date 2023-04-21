@@ -10,21 +10,15 @@ permissions:
 jobs:
 
   stage_1:
-    name: Push to EC2
+    name: Pull latest develop version of mkrgenius-brain
     runs-on: ubuntu-latest
-    environment: develop
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
-    - name: Push latest mkrgenius-brain to EC2
-      uses: easingthemes/ssh-deploy@main
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.DEV_EC2_SSH_KEY }}
-        REMOTE_HOST: ${{ secrets.DEV_HOST_DNS }}
-        REMOTE_USER: ${{ secrets.DEV_USERNAME }}
-        TARGET: ${{ secrets.DEV_TARGET_DIR }}
+      with:
+        ref: 'develop'
+        fetch-depth: 0
   
   stage_2:
     name: Build and re-start dev-mkrgenius-brain
